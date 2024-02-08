@@ -1,0 +1,144 @@
+import { PlusCircle } from "lucide-react";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { toast } from "sonner";
+import axios from "axios";
+import { Button } from "./ui/button";
+import { PetsProps, createClientSchema } from "@/types/types";
+import { postPets } from "@/api/api";
+import { z } from "zod";
+import { asyncTimeout } from "@/service/timeout";
+
+type CreateClientSchema = z.infer<typeof createClientSchema>;
+
+export default function CreatePet() {
+  const { register, handleSubmit, reset, formState } =
+    useForm<CreateClientSchema>();
+  let { isSubmitting, isSubmitted } = formState;
+
+  const [visible, setVisible] = useState(isSubmitted);
+
+  async function newClient(pets: CreateClientSchema) {
+    try {
+      await axios
+        .post("http://localhost:3001/pets/", pets)
+        .then((response) => console.log(response.data.message));
+      setVisible(false);
+    } catch (erro) {
+      toast.error("Cliente não foi criado.");
+    }
+    window.location.reload();
+    reset();
+  }
+
+  const validation = () => {
+    setVisible(!visible);
+  };
+
+  return (
+    <>
+      <Dialog onOpenChange={validation} open={visible}>
+        <DialogTrigger asChild>
+          <button>
+            <p className="flex gap-2 text-xs items-center uppercase font-bold">
+              Novo pet <PlusCircle size={20} />
+            </p>
+          </button>
+        </DialogTrigger>
+
+        <DialogContent className="sm:max-w-[[425px]">
+          <DialogHeader>
+            <DialogTitle>Criar Pet</DialogTitle>
+            <DialogDescription>
+              Certifique-se de que as informações do pet estejam corretas.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(newClient)} className="space-y-7">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="nome" className="text-left">
+                Nome
+              </Label>
+              <Input
+                placeholder="Nome do pet"
+                className="col-span-3"
+                {...register("nome")}
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <Label htmlFor="idade" className="text-left">
+                Idade
+              </Label>
+              <div className="space-y-2">
+                <Input
+                  type="number"
+                  placeholder="Idade do pet"
+                  className="col-span-3"
+                  {...register("idade")}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="especie" className="text-left">
+                Espécie
+              </Label>
+              <div className="space-y-2">
+                <Input className="col-span-3" {...register("especie")} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="price" className="text-left">
+                Raça
+              </Label>
+              <div className="space-y-2">
+                <Input className="col-span-3" {...register("raca")} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="status" className="text-left">
+                Status da adoção
+              </Label>
+
+              <select
+                className="max-w-[180px] rounded border px-3 py-2 text-zinc-600"
+                {...register("adocao")}
+              >
+                <option disabled selected>
+                  Adoção
+                </option>
+                <option value="true">Adotado</option>
+                <option value="false">Disponivel para Adoção</option>
+              </select>
+            </div>
+
+            <div className="flex gap-10">
+              <Button type="submit" disabled={isSubmitting}>
+                Salvar Pet
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" disabled={isSubmitting}>
+                  Cancelar
+                </Button>
+              </DialogClose>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
