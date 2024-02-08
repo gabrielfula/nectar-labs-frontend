@@ -15,10 +15,10 @@ export const postPets = async (pets: CreateClientSchema) => {
   return response.data;
 };
 
-export const deletePets = async (id: string) => {
+export const deletePets = async (id: number) => {
   await api.delete(`/pets/${id}`);
 };
 
-export const updatePets = async (id: string, data: DataProps) => {
+export const updatePets = async (id: number, data: DataProps) => {
   await api.put(`/pets/adopt/${id}`, data);
 };
