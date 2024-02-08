@@ -10,18 +10,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { toast } from "sonner";
 import axios from "axios";
 import { Button } from "./ui/button";
-import { PetsProps, createClientSchema } from "@/types/types";
-import { postPets } from "@/api/api";
+import { createClientSchema } from "@/types/types";
 import { z } from "zod";
-import { asyncTimeout } from "@/service/timeout";
+import { postPets } from "@/api/api";
 
-type CreateClientSchema = z.infer<typeof createClientSchema>;
+export type CreateClientSchema = z.infer<typeof createClientSchema>;
 
 export default function CreatePet() {
   const { register, handleSubmit, reset, formState } =
@@ -32,12 +29,10 @@ export default function CreatePet() {
 
   async function newClient(pets: CreateClientSchema) {
     try {
-      await axios
-        .post("http://localhost:3001/pets/", pets)
-        .then((response) => console.log(response.data.message));
+      await postPets(pets);
       setVisible(false);
     } catch (erro) {
-      toast.error("Cliente não foi criado.");
+      console.log("Cliente não foi criado.");
     }
     window.location.reload();
     reset();

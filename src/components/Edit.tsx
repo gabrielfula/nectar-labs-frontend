@@ -1,14 +1,15 @@
+import { deletePets } from "@/api/api";
 import axios from "axios";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 
 interface EditProps {
   id: string;
 }
 
 export default function Edit({ id }: EditProps) {
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
-      axios.delete(`http://localhost:3001/pets/${id}`);
+      await deletePets(id);
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -17,7 +18,9 @@ export default function Edit({ id }: EditProps) {
 
   return (
     <>
-      <Trash size={20} strokeWidth={1.25} onClick={handleDelete} />
+      <button>
+        <Trash size={20} strokeWidth={1.25} onClick={handleDelete} />
+      </button>
     </>
   );
 }

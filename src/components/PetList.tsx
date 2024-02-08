@@ -19,9 +19,8 @@ export default function PetList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataAxios = await getPets();
-        console.log(dataAxios);
-        setPets(dataAxios);
+        const response = await getPets();
+        setPets(response);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }

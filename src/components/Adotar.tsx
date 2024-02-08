@@ -1,18 +1,21 @@
-import axios from "axios";
 import { Button } from "./ui/button";
+import { updatePets } from "@/api/api";
 
 interface AdotarProps {
   id: string;
 }
+export interface DataProps {
+  adocao: boolean;
+}
 
 export default function Adotar({ id }: AdotarProps) {
-  const data = {
+  const data: DataProps = {
     adocao: true,
   };
 
-  const handlePut = () => {
+  const handlePut = async () => {
     try {
-      axios.put(`http://localhost:3001/pets/adopt/${id}`, data);
+      await updatePets(id, data);
       window.location.reload();
     } catch (error) {
       console.log(error);
