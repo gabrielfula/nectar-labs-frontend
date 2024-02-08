@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { updatePets } from "@/api/api";
 
 interface AdotarProps {
-  id: string;
+  id: number;
 }
 export interface DataProps {
   adocao: boolean;

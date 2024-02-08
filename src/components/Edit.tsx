@@ -2,7 +2,7 @@ import { deletePets } from "@/api/api";
 import { Trash } from "lucide-react";
 
 interface EditProps {
-  id: string;
+  id: number;
 }
 
 export default function Edit({ id }: EditProps) {
