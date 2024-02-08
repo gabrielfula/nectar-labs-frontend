@@ -13,6 +13,6 @@ export const createClientSchema = z.object({
   nome: z.string().nonempty("Nome é obrigatório"),
   especie: z.string().nonempty("Espécie é obrigatório"),
   raca: z.string().nonempty("Raça é obrigatório"),
-  idade: z.number(),
+  idade: z.coerce.number(),
   adocao: z.string().nonempty("Escolha o status da adoção."),
 });
