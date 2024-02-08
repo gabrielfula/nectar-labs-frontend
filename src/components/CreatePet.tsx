@@ -12,18 +12,20 @@ import {
 } from "./ui/dialog";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import axios from "axios";
 import { Button } from "./ui/button";
 import { createClientSchema } from "@/types/types";
 import { z } from "zod";
 import { postPets } from "@/api/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export type CreateClientSchema = z.infer<typeof createClientSchema>;
 
 export default function CreatePet() {
   const { register, handleSubmit, reset, formState } =
-    useForm<CreateClientSchema>();
-  let { isSubmitting, isSubmitted } = formState;
+    useForm<CreateClientSchema>({
+      resolver: zodResolver(createClientSchema),
+    });
+  let { errors, isSubmitting, isSubmitted } = formState;
 
   const [visible, setVisible] = useState(isSubmitted);
 
@@ -70,6 +72,11 @@ export default function CreatePet() {
                 className="col-span-3"
                 {...register("nome")}
               />
+              {errors.nome && (
+                <span className="flex text-red-500 text-sm font-bold">
+                  {errors.nome.message}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col gap-4">
@@ -93,6 +100,11 @@ export default function CreatePet() {
               <div className="space-y-2">
                 <Input className="col-span-3" {...register("especie")} />
               </div>
+              {errors.especie && (
+                <span className="flex text-red-500 text-sm font-bold">
+                  {errors.especie.message}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -102,6 +114,11 @@ export default function CreatePet() {
               <div className="space-y-2">
                 <Input className="col-span-3" {...register("raca")} />
               </div>
+              {errors.raca && (
+                <span className="flex text-red-500 text-sm font-bold">
+                  {errors.raca.message}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -119,6 +136,11 @@ export default function CreatePet() {
                 <option value="true">Adotado</option>
                 <option value="false">Disponivel para Adoção</option>
               </select>
+              {errors.adocao && (
+                <span className="flex text-red-500 text-sm font-bold">
+                  {errors.adocao.message}
+                </span>
+              )}
             </div>
 
             <div className="flex gap-10">
