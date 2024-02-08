@@ -1,5 +1,4 @@
 import { deletePets } from "@/api/api";
-import axios from "axios";
 import { Trash } from "lucide-react";
 
 interface EditProps {
